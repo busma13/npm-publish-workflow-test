@@ -11,20 +11,32 @@ jobs:
   npm-publish:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Register npm token
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           # NOTE: Hard Coded Node Version
-          node-version: '18.x'
+          node-version: 18.19.1
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-      - run: yarn setup
-      - name: Retrieve version
-        run : echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
-        id: version
-      - run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --new-version ${{ steps.version.outputs.NEW_VERSION }} --no-git-tag-version --registry https://registry.npmjs.org/ --tag latest
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install and build packages
+        run: yarn setup
+
+      - name: Publish to npm
+        run: yarn ts-scripts publish -t tag npm
+
+      # - name: Retrieve version
+        # run : echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+        # id: version
+      # - run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --new-version ${{ steps.version.outputs.NEW_VERSION }} --no-git-tag-version --registry https://registry.npmjs.org/ --tag latest
+
