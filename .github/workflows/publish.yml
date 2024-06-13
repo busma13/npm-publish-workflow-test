@@ -20,10 +20,11 @@ jobs:
           # NOTE: Hard Coded Node Version
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
+          always-auth: true
       - run: yarn setup
       - name: Retrieve version
         run : echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
         id: version
-      - run: yarn publish --non-interactive --new-version ${{ steps.version.outputs.NEW_VERSION }} --no-git-tag-version --registry https://registry.npmjs.org/luitjens-npm-test --tag latest
+      - run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc && yarn publish --non-interactive --new-version ${{ steps.version.outputs.NEW_VERSION }} --no-git-tag-version --registry https://registry.npmjs.org/luitjens-npm-test --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
