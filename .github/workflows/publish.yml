@@ -49,7 +49,7 @@ jobs:
           CURRENT_VERSION=$(jq -r .version package.json)
           echo "current version:" $CURRENT_VERSION
 
-          if yarn semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
+          if ./node_modules/.bin/semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT
