@@ -32,7 +32,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install semver
-        run: yarn add semver-compare-cli
+        run: |
+          yarn add semver-compare-cli
+          yarn semver-compare -v
   
       - name: Check for teraslice version update
         id: version_check
@@ -47,10 +49,7 @@ jobs:
           CURRENT_VERSION=$(jq -r .version package.json)
           echo "current version:" $CURRENT_VERSION
 
-          which semver-compare
-          semver-compare -v
-
-          if semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
+          if yarn semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT

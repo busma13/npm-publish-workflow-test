@@ -32,4 +32,20 @@ jobs:
         run: |
           yarn add semver-compare-cli
           yarn semver-compare -v
-          which semver-compare
+          if yarn semver-compare 1.0.0 gt 2.0.0; then
+            echo "version_updated=true" >> $GITHUB_OUTPUT
+          else
+            echo "version_updated=false" >> $GITHUB_OUTPUT
+          fi
+
+          if yarn semver-compare 2.0.0 gt 2.0.0; then
+            echo "version_updated=true" >> $GITHUB_OUTPUT
+          else
+            echo "version_updated=false" >> $GITHUB_OUTPUT
+          fi
+
+          if yarn semver-compare 3.0.0 gt 2.0.0; then
+            echo "version_updated=true" >> $GITHUB_OUTPUT
+          else
+            echo "version_updated=false" >> $GITHUB_OUTPUT
+          fi
