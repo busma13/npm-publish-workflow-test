@@ -11,13 +11,13 @@ jobs:
   npm-publish:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    permissions:
-      contents: write
+    # env:
+    #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    # permissions:
+    #   contents: write
     steps:
-      - name: Register npm token
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      # - name: Register npm token
+      #   run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Check out code
         uses: actions/checkout@v4
@@ -26,14 +26,40 @@ jobs:
         uses: actions/setup-node@v4
         with:
           # NOTE: Hard Coded Node Version
-          node-version: 18.19.1
+          node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install and build packages
-        run: yarn setup
+      - name: Install semver
+        run: yarn add semver
+  
+      - name: Check for teraslice version update
+        id: version_check
+        run: |
+          BASE_COMMIT=$(git merge-base HEAD HEAD^)
+          BASE_VERSION=$(git show $BASE_COMMIT:package.json | jq -r .version)
+          CURRENT_VERSION=$(jq -r .version package.json)
 
-      - name: Publish to npm
-        run: yarn ts-scripts publish -t tag npm
+          VERSION_UPDATED=$(yarn semver $CURRENT_VERSION -gt $BASE_VERSION)
+          echo "version_updated=$VERSION_UPDATED" >> $GITHUB_OUTPUT
+          echo "TAG=v$CURRENT_VERSION"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: steps.version_check.outputs.version_updated == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          tag_name: ${{ steps.version_check.outputs.tag }}
+          name: ${{ steps.version_check.outputs.tag }}
+          body: 'Human generated notes will go here'
+          generate_release_notes: true
+          files: ./package.json
+
+      # - name: Install and build packages
+      #   run: yarn setup
+
+      # - name: Publish to npm
+      #   run: yarn ts-scripts publish -t tag npm
 
       # - name: Retrieve version
         # run : echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
