@@ -35,6 +35,8 @@ jobs:
 
           ./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0 || EXIT_CODE=$?
          
+          echo "START"
+          
           if [ "$EXIT_CODE" = "0" ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
@@ -50,9 +52,11 @@ jobs:
           fi
 
           ./node_modules/.bin/semver-compare 3.0.0 gt 2.0.0 || EXIT_CODE3=$?
-          
+
           if [ "$EXIT_CODE3" = "0" ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT
           fi
+
+          echo "END"
