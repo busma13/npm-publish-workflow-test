@@ -55,4 +55,4 @@ jobs:
 
           tag=v$CURRENT_VERSION
 
-          echo tag
+          echo $tag
