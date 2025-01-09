@@ -31,5 +31,5 @@ jobs:
       - name: Install semver
         run: |
           yarn add semver-compare-cli
-          semver-compare -v
+          yarn semver-compare -v
           which semver-compare
