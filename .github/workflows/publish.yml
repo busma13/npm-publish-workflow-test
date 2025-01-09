@@ -55,10 +55,7 @@ jobs:
             echo "version_updated=false" >> $GITHUB_OUTPUT
           fi
 
-          echo "TAG=v$CURRENT_VERSION"
-          echo "tag:" $TAG
-
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "tag=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Release
         if: steps.version_check.outputs.version_updated == 'true'
