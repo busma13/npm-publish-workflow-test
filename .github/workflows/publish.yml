@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     # env:
-    #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    #   RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
     # permissions:
     #   contents: write
     steps:
@@ -50,17 +50,21 @@ jobs:
           echo "current version:" $CURRENT_VERSION
 
           if ./node_modules/.bin/semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
+            echo "version_updated=true"
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
+            echo "version_updated=true"
             echo "version_updated=false" >> $GITHUB_OUTPUT
           fi
 
+          echo "tag=v$CURRENT_VERSION"
           echo "tag=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Release
         if: steps.version_check.outputs.version_updated == 'true'
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.RELEASE_TOKEN }}
           prerelease: true
           tag_name: ${{ steps.version_check.outputs.tag }}
           name: ${{ steps.version_check.outputs.tag }}
