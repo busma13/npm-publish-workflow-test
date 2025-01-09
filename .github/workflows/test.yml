@@ -51,4 +51,8 @@ jobs:
             echo "version_updated=false"
           fi
 
-          echo "END"
+          CURRENT_VERSION=$(jq -r .version package.json)
+
+          tag=v$CURRENT_VERSION
+
+          echo tag
