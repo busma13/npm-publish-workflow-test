@@ -34,6 +34,7 @@ jobs:
           yarn semver-compare -v
 
           RESULT1=$(./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0)
+          echo "RESULT1:" $RESULT1
           if [ "$RESULT1" -eq 0 ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
