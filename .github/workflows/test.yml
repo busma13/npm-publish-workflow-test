@@ -35,7 +35,7 @@ jobs:
 
           ./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0 || EXIT_CODE=$?
          
-          echo "$EXIT_CODE"
+          echo "1: $EXIT_CODE"
 
           if [ "$EXIT_CODE" = "0" ]; then
             echo "version_updated=true"
@@ -45,7 +45,7 @@ jobs:
 
           ./node_modules/.bin/semver-compare 2.0.0 gt 2.0.0 || EXIT_CODE2=$?
 
-          echo "$EXIT_CODE2"
+          echo "2: $EXIT_CODE2"
 
           if [ "$EXIT_CODE2" = "0" ]; then
             echo "version_updated=true"
@@ -54,8 +54,8 @@ jobs:
           fi
 
           ./node_modules/.bin/semver-compare 3.0.0 gt 2.0.0 || EXIT_CODE3=$?
-          
-          echo "$EXIT_CODE3"
+
+          echo "3: $EXIT_CODE3"
 
           if [ "$EXIT_CODE3" = "0" ]; then
             echo "version_updated=true"
