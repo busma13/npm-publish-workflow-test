@@ -47,6 +47,9 @@ jobs:
           CURRENT_VERSION=$(jq -r .version package.json)
           echo "current version:" $CURRENT_VERSION
 
+          which semver-compare
+          semver-compare -v
+
           if semver-compare $CURRENT_VERSION gt $BASE_VERSION; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
