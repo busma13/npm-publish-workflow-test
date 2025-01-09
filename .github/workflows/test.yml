@@ -33,27 +33,23 @@ jobs:
           yarn add semver-compare-cli
           yarn semver-compare -v
 
-          ./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0
-
-          echo "after"
-
-          RESULT1=$(./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0)
+          RESULT1=$(./node_modules/.bin/semver-compare 1.0.0 gt 2.0.0) || EXIT_CODE=$?
           echo "RESULT1:" $RESULT1
-          if [ "$RESULT1" -eq 0 ]; then
+          if [ "$EXIT_CODE" = "0" ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT
           fi
 
-          RESULT2=$(./node_modules/.bin/semver-compare 2.0.0 gt 2.0.0)
-          if [ "$RESULT2" -eq 0 ]; then
+          RESULT2=$(./node_modules/.bin/semver-compare 2.0.0 gt 2.0.0) || EXIT_CODE2=$?
+          if [ "$EXIT_CODE2" = "0" ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT
           fi
 
-          RESULT2=$(./node_modules/.bin/semver-compare 3.0.0 gt 2.0.0)
-          if [ "$RESULT3" -eq 0 ]; then
+          RESULT2=$(./node_modules/.bin/semver-compare 3.0.0 gt 2.0.0) || EXIT_CODE3=$?
+          if [ "$EXIT_CODE3" = "0" ]; then
             echo "version_updated=true" >> $GITHUB_OUTPUT
           else
             echo "version_updated=false" >> $GITHUB_OUTPUT
