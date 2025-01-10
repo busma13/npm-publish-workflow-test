@@ -56,11 +56,13 @@ jobs:
           CURRENT_VERSION=$(jq -r .version package.json)
           echo "current version:" $CURRENT_VERSION
 
-          ./node_modules/.bin/semver-compare $CURRENT_VERSION gt $BASE_VERSION
+          ./node_modules/.bin/semver-compare $CURRENT_VERSION gt $BASE_VERSION || true
           CURRENT_RESULT=$?
+          echo "current result:" $CURRENT_RESULT
 
-          ./node_modules/.bin/semver-compare $PR_VERSION gt $BASE_VERSION
+          ./node_modules/.bin/semver-compare $PR_VERSION gt $BASE_VERSION || true
           PR_RESULT=$?
+          echo "PR result:" $PR_RESULT
 
           if [ $CURRENT_RESULT -eq 0 ] && [ $PR_RESULT -eq 0 ]; then
             echo "version_updated=true"
