@@ -42,8 +42,10 @@ jobs:
         # HEAD^ is the previous commit (final commit of the PR)
         # BASE_COMMIT is the common ancestor ()
         run: |
-          echo "HEAD:" HEAD
-          echo "HEAD^:" HEAD^
+          HEAD=$(git rev-parse HEAD)
+          PR_HEAD=$(git rev-parse HEAD^)
+          echo "HEAD:" $HEAD
+          echo "PR_HEAD:" $PR_HEAD
           BASE_COMMIT=$(git merge-base HEAD HEAD^)
           echo "base commit:" $BASE_COMMIT
 
