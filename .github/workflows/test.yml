@@ -59,6 +59,7 @@ jobs:
           echo "tag=$tag" >> $GITHUB_OUTPUT
 
       - name: Announce release in Slack channel
+        id: announce-release
         uses: slackapi/slack-github-action@v2.0.0
         with:
           errors: true
@@ -71,3 +72,7 @@ jobs:
               Please review and revise the automated release notes:
               https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}
 
+      - name: Announcement Response
+        if: ${{ steps.announce-release.outputs.ok }}
+        run: echo "Slackbot API response - ${{ steps.announce-release.outputs.response }}"
+      
