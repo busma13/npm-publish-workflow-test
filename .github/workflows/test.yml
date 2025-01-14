@@ -66,9 +66,8 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ vars.SLACK_RELEASES_CHANNEL_ID }}
-            text: "test"
-            # text: |
-            #   "npm-publish-workflow-test version ${{ steps.install-semver.outputs.tag }} updated.
-            #   Please review and revise the automated release notes:
-            #   https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}"
+            text: |
+              "npm-publish-workflow-test version ${{ steps.install-semver.outputs.tag }} updated.
+              Please review and revise the automated release notes:
+              https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}"
 
