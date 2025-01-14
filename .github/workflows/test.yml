@@ -72,7 +72,8 @@ jobs:
               Please review and revise the automated release notes:
               https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}
 
-      - name: Announcement Response
-        if: ${{ steps.announce-release.outputs.ok }}
-        run: echo "Slackbot API response - ${{ steps.announce-release.outputs.response }}"
+      - name: Failed Announcement Response
+        if: ${{ !steps.announce-release.outputs.ok }}
+        run: |
+          echo "Slackbot API response : ${{ steps.announce-release.outputs.response }}"
       
