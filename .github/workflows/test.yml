@@ -56,7 +56,7 @@ jobs:
 
           tag=v$CURRENT_VERSION
 
-          echo "tag=$tag" >> GITHUB_OUTPUT
+          echo "tag=$tag" >> $GITHUB_OUTPUT
 
       - name: Announce release in Slack channel
         uses: slackapi/slack-github-action@v2.0.0
@@ -67,7 +67,7 @@ jobs:
           payload: |
             channel: ${{ vars.SLACK_RELEASES_CHANNEL_ID }}
             text: |
-              "npm-publish-workflow-test version ${{ steps.install-semver.outputs.tag }} updated.
+              npm-publish-workflow-test version ${{ steps.install-semver.outputs.tag }} updated.
               Please review and revise the automated release notes:
-              https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}"
+              https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}
 
