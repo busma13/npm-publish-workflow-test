@@ -29,6 +29,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install semver
+        id: install-semver
         run: |
           yarn add semver-compare-cli
           yarn semver-compare -v
@@ -55,5 +56,18 @@ jobs:
 
           tag=v$CURRENT_VERSION
 
-          echo $tag
+          echo "tag=$tag" >> GITHUB_OUTPUT
+
+      - name: Announce release in Slack channel
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          errors: true
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ vars.SLACK_RELEASES_CHANNEL_ID }}
+            text: |
+              "npm-publish-workflow-test version ${{ steps.install-semver.outputs.tag }} has been released.
+              Please review and revise the automated release notes:
+              https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}"
 
