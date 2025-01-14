@@ -72,7 +72,7 @@ jobs:
               https://github.com/terascope/teraslice/releases/tag/${{ steps.install-semver.outputs.tag }}
 
       - name: Failed Announcement Response
-        if: ${{ steps.announce-release.outputs.ok == false }}
+        if: ${{ steps.announce-release.outputs.ok == 'false' }}
         run: |
           echo "Slackbot API response : ${{ steps.announce-release.outputs.response }}"
       
