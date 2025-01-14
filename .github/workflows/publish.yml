@@ -97,6 +97,20 @@ jobs:
           generate_release_notes: true
           files: ./package.json
 
+      - name: Announce release in Slack channel
+        if: steps.version_check.outputs.version_updated == 'true'
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          errors: true
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ vars.SLACK_RELEASES_CHANNEL_ID }}
+            text: |
+              "npm-publish-workflow-test version ${{ steps.version_check.outputs.tag }} has been released.
+              Please review and revise the automated release notes:
+              https://github.com/terascope/teraslice/releases/tag/${{ steps.version_check.outputs.tag }}"
+
       # - name: Install and build packages
       #   run: yarn setup
 
